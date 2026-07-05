@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>مطعم الأصالة</title>
+
+  <!-- ═══ FONTS ═══ -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <!-- ═══ TAILWIND CSS ═══ -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- ═══ AOS — Animate On Scroll ═══ -->
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
+
+  <!-- ═══ FONT AWESOME — icons ═══ -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- ═══ SWIPER — touch carousel ═══ -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+  <!-- ═══ Tailwind config ═══ -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Tajawal', 'sans-serif'] },
+          colors: {
+            primary:   { DEFAULT: '#F97316', dark: '#EA6C0A', light: '#FB923C', 50: '#FFF7ED' },
+            ink:       { DEFAULT: '#0A0A0A', 800: '#1A1A1A', 700: '#2A2A2A', 600: '#3A3A3A', 400: '#6B6B6B', 200: '#D4D4D4', 100: '#F4F4F4' },
+          },
+          keyframes: {
+            'glow-pulse': {
+              '0%,100%': { boxShadow: '0 0 0 0 rgba(249,115,22,.5)' },
+              '50%':      { boxShadow: '0 0 0 16px rgba(249,115,22,0)' },
+            },
+            'float': {
+              '0%,100%': { transform: 'translateY(0px)' },
+              '50%':     { transform: 'translateY(-10px)' },
+            },
+            'shimmer-ltr': {
+              '0%':   { transform: 'translateX(-100%)' },
+              '100%': { transform: 'translateX(250%)' },
+            },
+            'ticker': {
+              '0%':   { transform: 'translateX(0)' },
+              '100%': { transform: 'translateX(-50%)' },
+            },
+          },
+          animation: {
+            'glow-pulse':   'glow-pulse 2.4s ease-out infinite',
+            'float':        'float 3.6s ease-in-out infinite',
+            'shimmer-ltr':  'shimmer-ltr .8s ease forwards',
+            'ticker':       'ticker 22s linear infinite',
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- ═══ Custom CSS ═══ -->
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Tajawal', sans-serif; background: #0A0A0A; color: #0A0A0A; overflow-x: hidden; }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #0A0A0A; }
+    ::-webkit-scrollbar-thumb { background: #F97316; border-radius: 3px; }
+
+    /* ── Nav scroll ── */
+    #navbar { transition: background .4s, padding .4s, box-shadow .4s; }
+    #navbar.scrolled { background: rgba(10,10,10,.97); backdrop-filter: blur(16px); box-shadow: 0 2px 32px rgba(249,115,22,.12); }
+
+    /* ── Nav link underline ── */
+    .nav-link { position: relative; }
+    .nav-link::after {
+      content: ''; position: absolute; bottom: -4px; right: 50%; left: 50%;
+      height: 2px; background: #F97316; border-radius: 2px;
+      transition: left .3s ease, right .3s ease;
+    }
+    .nav-link:hover::after { right: 0; left: 0; }
+
+    /* ── Card ── */
+    .menu-card { transition: transform .4s cubic-bezier(.22,1,.36,1), box-shadow .4s ease; }
+    .menu-card:hover { transform: translateY(-10px); box-shadow: 0 28px 56px rgba(249,115,22,.18); }
+    .menu-card:hover .card-img { transform: scale(1.08); }
+    .card-img { transition: transform .6s cubic-bezier(.22,1,.36,1); }
+
+    /* ── Btn shine ── */
+    .btn-shine { position: relative; overflow: hidden; }
+    .btn-shine::after {
+      content: ''; position: absolute; top: 0; left: -80%;
+      width: 50%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.22), transparent);
+      transition: left .55s ease;
+    }
+    .btn-shine:hover::after { left: 160%; }
+
+    /* ── Orange glow text ── */
+    .text-glow { text-shadow: 0 0 40px rgba(249,115,22,.55); }
+
+    /* ── Ticker marquee ── */
+    .ticker-wrap { overflow: hidden; }
+    .ticker-inner { display: inline-flex; white-space: nowrap; animation: ticker 22s linear infinite; }
+
+    /* ── Section divider dots ── */
+    .dot-divider { display: flex; align-items: center; gap: .75rem; }
+    .dot-divider::before, .dot-divider::after { content: ''; flex: 1; max-width: 64px; height: 1px; background: rgba(249,115,22,.3); }
+
+    /* ── Stat card ── */
+    .stat-card { transition: background .3s, transform .3s, border-color .3s; }
+    .stat-card:hover { background: rgba(249,115,22,.12); transform: translateY(-4px); border-color: rgba(249,115,22,.35); }
+
+    /* ── Mobile menu ── */
+    #mobile-menu { max-height: 0; overflow: hidden; transition: max-height .4s ease; }
+    #mobile-menu.open { max-height: 400px; }
+
+    /* ── Toast ── */
+    #toast {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
+      background: #F97316; color: #fff; padding: .8rem 2rem;
+      border-radius: 999px; font-weight: 700; font-size: 1rem;
+      z-index: 9999; white-space: nowrap;
+      box-shadow: 0 8px 32px rgba(249,115,22,.5);
+      transition: transform .4s cubic-bezier(.22,1,.36,1), opacity .4s;
+      opacity: 0; pointer-events: none;
+    }
+    #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+    /* ── Swiper dots ── */
+    .swiper-pagination-bullet { background: #F97316; opacity: .3; }
+    .swiper-pagination-bullet-active { opacity: 1; }
+
+    /* ── Form input ── */
+    .form-input { transition: border-color .2s, box-shadow .2s; }
+    .form-input:focus { outline: none; border-color: #F97316; box-shadow: 0 0 0 3px rgba(249,115,22,.18); }
+
+    /* ── Scroll indicator ── */
+    @keyframes bounce-y { 0%,100%{ transform:translateY(0) } 50%{ transform:translateY(8px) } }
+    .bounce-y { animation: bounce-y 1.5s ease-in-out infinite; }
+
+    /* ── Star pulse ── */
+    @keyframes star-pulse { 0%,100%{ opacity:1 } 50%{ opacity:.55 } }
+    .star-ani { animation: star-pulse 2s ease-in-out infinite; }
+    .star-ani:nth-child(2){ animation-delay:.2s; }
+    .star-ani:nth-child(3){ animation-delay:.4s; }
+    .star-ani:nth-child(4){ animation-delay:.6s; }
+    .star-ani:nth-child(5){ animation-delay:.8s; }
+  </style>
+</head>
+
+<body class="bg-ink">
+
+<!-- ══════════════════════════════════════════
+     NAVBAR
+══════════════════════════════════════════ -->
+<nav id="navbar" class="fixed top-0 w-full z-50 py-5">
+  <div class="container mx-auto px-6 lg:px-12 flex justify-between items-center">
+
+    <!-- Logo -->
+    <a href="#home" class="flex items-center gap-3 group">
+      <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110">
+        <i class="fas fa-utensils text-white text-sm"></i>
+      </div>
+      <span class="text-white font-black text-xl">مطعم الأصالة</span>
+    </a>
+
+    <!-- Desktop links -->
+    <div class="hidden md:flex items-center gap-8">
+      <a href="#home"    class="nav-link text-white/70 hover:text-white font-semibold text-sm transition-colors duration-300">الرئيسية</a>
+      <a href="#menu"    class="nav-link text-white/70 hover:text-white font-semibold text-sm transition-colors duration-300">القائمة</a>
+      <a href="#about"   class="nav-link text-white/70 hover:text-white font-semibold text-sm transition-colors duration-300">من نحن</a>
+      <a href="#contact" class="nav-link text-white/70 hover:text-white font-semibold text-sm transition-colors duration-300">اتصل بنا</a>
+      <a href="#menu"
+         class="btn-shine bg-primary text-white px-6 py-2.5 rounded-full text-sm font-black hover:bg-primary-dark hover:scale-105 transition-all duration-300 shadow-lg">
+        اطلب الآن
+      </a>
+    </div>
+
+    <!-- Hamburger -->
+    <button id="menu-btn" class="md:hidden text-white/80 hover:text-primary p-2 rounded-lg hover:bg-white/5 transition-colors" aria-label="القائمة">
+      <i class="fas fa-bars text-xl"></i>
+    </button>
+  </div>
+
+  <!-- Mobile dropdown -->
+  <div id="mobile-menu" class="md:hidden border-t border-white/5" style="background:rgba(10,10,10,.98)">
+    <div class="flex flex-col px-6 py-3 gap-1">
+      <a href="#home"    class="py-3.5 text-right font-bold text-white/70 hover:text-primary border-b border-white/5 transition-colors" onclick="closeMobileMenu()">الرئيسية</a>
+      <a href="#menu"    class="py-3.5 text-right font-bold text-white/70 hover:text-primary border-b border-white/5 transition-colors" onclick="closeMobileMenu()">القائمة</a>
+      <a href="#about"   class="py-3.5 text-right font-bold text-white/70 hover:text-primary border-b border-white/5 transition-colors" onclick="closeMobileMenu()">من نحن</a>
+      <a href="#contact" class="py-3.5 text-right font-bold text-white/70 hover:text-primary transition-colors" onclick="closeMobileMenu()">اتصل بنا</a>
+    </div>
+  </div>
+</nav>
+
+
+<!-- ══════════════════════════════════════════
+     HERO
+══════════════════════════════════════════ -->
+<section id="home" class="relative h-screen flex items-center justify-center overflow-hidden bg-ink">
+
+  <!-- Background image -->
+  <div id="hero-bg" class="absolute inset-0 z-0">
+    <div class="absolute inset-0 z-10" style="background:linear-gradient(to top, rgba(10,10,10,1) 0%, rgba(10,10,10,.65) 45%, rgba(10,10,10,.4) 100%)"></div>
+    <!-- Orange vignette accent -->
+    <div class="absolute inset-0 z-10" style="background:radial-gradient(ellipse at 80% 100%, rgba(249,115,22,.18) 0%, transparent 60%)"></div>
+    <img
+      id="hero-img"
+      src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=2070&auto=format&fit=crop"
+      alt="مطعم الأصالة"
+      class="w-full h-full object-cover scale-110"
+    />
+  </div>
+
+  <div class="container relative z-10 px-6 mx-auto text-center flex flex-col items-center">
+    <!-- Label badge -->
+    <span id="hero-label" class="inline-flex items-center gap-2 py-1.5 px-5 rounded-full border border-primary/40 bg-primary/10 mb-7 text-primary text-xs font-bold tracking-widest uppercase opacity-0 translate-y-4 transition-all duration-700 delay-300">
+      <i class="fas fa-fire-flame-curved"></i>
+      المذاق العريق
+    </span>
+
+    <!-- Headline -->
+    <h1 id="hero-title" class="text-5xl md:text-7xl lg:text-8xl font-black text-white mb-6 leading-tight opacity-0 translate-y-12 transition-all duration-900 delay-500">
+      تذوق أصالة<br/>
+      <span class="text-primary text-glow">الطعم العربي</span>
+    </h1>
+
+    <!-- Sub -->
+    <p id="hero-sub" class="text-base md:text-lg text-white/60 max-w-xl mx-auto mb-10 font-light leading-relaxed opacity-0 translate-y-8 transition-all duration-700 delay-700">
+      نقدم لكم تجربة طعام استثنائية تمزج بين عراقة الماضي وفخامة الحاضر في أجواء عربية أصيلة.
+    </p>
+
+    <!-- Buttons -->
+    <div id="hero-btns" class="flex flex-col sm:flex-row gap-4 justify-center opacity-0 translate-y-6 transition-all duration-700 delay-900">
+      <a href="#menu"
+         class="btn-shine bg-primary text-white px-12 py-4 rounded-full text-lg font-black hover:bg-primary-dark hover:scale-105 transition-all duration-300 shadow-2xl animate-glow-pulse flex items-center justify-center gap-2">
+        اطلب الآن
+        <i class="fas fa-chevron-down text-sm animate-bounce"></i>
+      </a>
+      <a href="#about"
+         class="bg-white/8 hover:bg-white/14 backdrop-blur-md text-white border border-white/15 px-10 py-4 rounded-full text-base font-semibold transition-all duration-300 flex items-center justify-center gap-2">
+        <i class="fas fa-circle-info text-primary text-sm"></i>
+        تعرف علينا
+      </a>
+    </div>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="absolute bottom-10 left-1/2 -translate-x-1/2 z-10 bounce-y text-primary/60">
+    <i class="fas fa-chevron-down text-2xl"></i>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     TICKER STRIP
+══════════════════════════════════════════ -->
+<div class="bg-primary py-3 ticker-wrap overflow-hidden">
+  <div class="ticker-inner">
+    <!-- duplicated for seamless loop -->
+    <span class="text-white font-black text-sm mx-8">🍖 مندي الضأن</span>
+    <span class="text-white/50 mx-4">✦</span>
+    <span class="text-white font-black text-sm mx-8">🍚 كبسة اللحم</span>
+    <span class="text-white/50 mx-4">✦</span>
+    <span class="text-white font-black text-sm mx-8">🍗 مضبي الدجاج</span>
+    <span class="text-white/50 mx-4">✦</span>
+    <span class="text-white font-black text-sm mx-8">🥘 منسف تقليدي</span>
+    <span class="text-white/50 mx-4">✦</span>
+    <span class="text-white font-black text-sm mx-8">🍖 مرقة الخروف</span>
+    <span class="text-white/50 mx-4">✦</span>
+    <span class="text-white font-black text-sm mx-8">🍯 هريسة التمر</span>
+    <span class="text-white/50 mx-4">✦</span>
+    <!-- duplicate for loop -->
+    <span class="text-white font-black text-sm mx-8">🍖 مندي الضأن</span>
+    <span class="text-white/50 mx-4">✦</span>
+    <span class="text-white font-black text-sm mx-8">🍚 كبسة اللحم</span>
+    <span class="text-white/50 mx-4">✦</span>
+    <span class="text-white font-black text-sm mx-8">🍗 مضبي الدجاج</span>
+    <span class="text-white/50 mx-4">✦</span>
+    <span class="text-white font-black text-sm mx-8">🥘 منسف تقليدي</span>
+    <span class="text-white/50 mx-4">✦</span>
+    <span class="text-white font-black text-sm mx-8">🍖 مرقة الخروف</span>
+    <span class="text-white/50 mx-4">✦</span>
+    <span class="text-white font-black text-sm mx-8">🍯 هريسة التمر</span>
+    <span class="text-white/50 mx-4">✦</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     MENU
+══════════════════════════════════════════ -->
+<section id="menu" class="py-28 bg-ink-800">
+  <div class="container mx-auto px-6 lg:px-12">
+
+    <!-- Header -->
+    <div class="text-center mb-20" data-aos="fade-up">
+      <p class="text-primary font-bold tracking-widest text-xs uppercase mb-3">
+        <i class="fas fa-fire-flame-curved mr-1"></i> Cuisine Authentique
+      </p>
+      <h2 class="text-5xl md:text-6xl font-black text-white mb-5">قائمة الطعام</h2>
+      <div class="dot-divider justify-center mb-6">
+        <i class="fas fa-utensils text-primary"></i>
+      </div>
+      <p class="text-white/40 max-w-2xl mx-auto text-base leading-relaxed font-light">
+        Des plats préparés avec soin à partir des meilleurs ingrédients frais, pour offrir une saveur qui vous plonge au cœur de la culture arabe authentique.
+      </p>
+    </div>
+
+    <!-- Desktop grid -->
+    <div class="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-7">
+
+      <!-- ─ Card 1 ─ -->
+      <div class="menu-card bg-ink rounded-2xl overflow-hidden border border-white/6 flex flex-col" data-aos="fade-up" data-aos-delay="0">
+        <div class="relative h-60 overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1585937421612-70a008356fbe?q=80&w=800&auto=format&fit=crop"
+               alt="مرقة خروف" class="card-img w-full h-full object-cover"/>
+          <div class="absolute inset-0" style="background:linear-gradient(to top,rgba(10,10,10,.8) 0%,transparent 55%)"></div>
+          <!-- Price -->
+          <div class="absolute bottom-4 start-4 bg-primary text-white px-4 py-1.5 rounded-full text-sm font-black shadow-lg">٥٥ ر.س</div>
+          <!-- Badge -->
+          <div class="absolute top-4 end-4 bg-ink/70 backdrop-blur-sm text-primary text-xs font-bold px-3 py-1 rounded-full border border-primary/30">Populaire</div>
+        </div>
+        <div class="p-6 flex flex-col flex-grow">
+          <h3 class="text-xl font-black text-white mb-1">مرقة خروف بالكمون</h3>
+          <p class="text-primary/80 text-xs font-bold tracking-wide mb-3 uppercase">Soupe d'agneau au cumin</p>
+          <p class="text-white/40 text-sm leading-relaxed mb-5 flex-grow">
+            Un bouillon généreux mijoté pendant des heures avec de l'agneau local tendre, du cumin grillé, des épices arabes soigneusement sélectionnées et des légumes frais de saison. Servi bien chaud avec du pain traditionnel cuit au four à bois, cette soupe réconfortante est un véritable hommage à la cuisine du terroir.
+          </p>
+          <button onclick="showToast('تم استلام طلبك لمرقة الخروف ✓')"
+            class="btn-shine w-full bg-primary text-white font-black py-3.5 rounded-xl hover:bg-primary-dark hover:scale-[1.02] transition-all duration-300 text-base">
+            اطلب <i class="fas fa-chevron-left text-xs mr-1"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- ─ Card 2 ─ -->
+      <div class="menu-card bg-ink rounded-2xl overflow-hidden border border-white/6 flex flex-col" data-aos="fade-up" data-aos-delay="80">
+        <div class="relative h-60 overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?q=80&w=800&auto=format&fit=crop"
+               alt="مضبي دجاج" class="card-img w-full h-full object-cover"/>
+          <div class="absolute inset-0" style="background:linear-gradient(to top,rgba(10,10,10,.8) 0%,transparent 55%)"></div>
+          <div class="absolute bottom-4 start-4 bg-primary text-white px-4 py-1.5 rounded-full text-sm font-black shadow-lg">٤٢ ر.س</div>
+          <div class="absolute top-4 end-4 bg-ink/70 backdrop-blur-sm text-primary text-xs font-bold px-3 py-1 rounded-full border border-primary/30">Chef's Choice</div>
+        </div>
+        <div class="p-6 flex flex-col flex-grow">
+          <h3 class="text-xl font-black text-white mb-1">مضبي الدجاج</h3>
+          <p class="text-primary/80 text-xs font-bold tracking-wide mb-3 uppercase">Poulet Mathbi Grillé</p>
+          <p class="text-white/40 text-sm leading-relaxed mb-5 flex-grow">
+            Un demi-poulet mariné toute une nuit dans un mélange exclusif de plus de douze épices arabes, puis grillé lentement sur pierre volcanique pour une peau croustillante et une chair fondante. Accompagné d'un riz kabuli parfumé au safran, de raisins secs et d'amandes dorées au beurre clarifié.
+          </p>
+          <button onclick="showToast('تم استلام طلبك لمضبي الدجاج ✓')"
+            class="btn-shine w-full bg-primary text-white font-black py-3.5 rounded-xl hover:bg-primary-dark hover:scale-[1.02] transition-all duration-300 text-base">
+            اطلب <i class="fas fa-chevron-left text-xs mr-1"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- ─ Card 3 ─ -->
+      <div class="menu-card bg-ink rounded-2xl overflow-hidden border border-white/6 flex flex-col" data-aos="fade-up" data-aos-delay="160">
+        <div class="relative h-60 overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1512058564366-18510be2db19?q=80&w=800&auto=format&fit=crop"
+               alt="كبسة اللحم" class="card-img w-full h-full object-cover"/>
+          <div class="absolute inset-0" style="background:linear-gradient(to top,rgba(10,10,10,.8) 0%,transparent 55%)"></div>
+          <div class="absolute bottom-4 start-4 bg-primary text-white px-4 py-1.5 rounded-full text-sm font-black shadow-lg">٦٥ ر.س</div>
+          <div class="absolute top-4 end-4 bg-ink/70 backdrop-blur-sm text-primary text-xs font-bold px-3 py-1 rounded-full border border-primary/30">Signature</div>
+        </div>
+        <div class="p-6 flex flex-col flex-grow">
+          <h3 class="text-xl font-black text-white mb-1">كبسة اللحم</h3>
+          <p class="text-primary/80 text-xs font-bold tracking-wide mb-3 uppercase">Kabsa — Riz & Agneau</p>
+          <p class="text-white/40 text-sm leading-relaxed mb-5 flex-grow">
+            Le plat emblématique de la péninsule arabique revisité par notre chef : un riz basmati à grain long cuit dans un bouillon d'agneau richement épicé à la cannelle, cardamome et clou de girofle, surmonté d'un gigot d'agneau braisé qui se détache à la fourchette, garni généreusement de pignons de pin grillés et de raisins sultana.
+          </p>
+          <button onclick="showToast('تم استلام طلبك لكبسة اللحم ✓')"
+            class="btn-shine w-full bg-primary text-white font-black py-3.5 rounded-xl hover:bg-primary-dark hover:scale-[1.02] transition-all duration-300 text-base">
+            اطلب <i class="fas fa-chevron-left text-xs mr-1"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- ─ Card 4 ─ -->
+      <div class="menu-card bg-ink rounded-2xl overflow-hidden border border-white/6 flex flex-col" data-aos="fade-up" data-aos-delay="0">
+        <div class="relative h-60 overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1574484284002-952d92456975?q=80&w=800&auto=format&fit=crop"
+               alt="منسف" class="card-img w-full h-full object-cover"/>
+          <div class="absolute inset-0" style="background:linear-gradient(to top,rgba(10,10,10,.8) 0%,transparent 55%)"></div>
+          <div class="absolute bottom-4 start-4 bg-primary text-white px-4 py-1.5 rounded-full text-sm font-black shadow-lg">٧٥ ر.س</div>
+          <div class="absolute top-4 end-4 bg-ink/70 backdrop-blur-sm text-primary text-xs font-bold px-3 py-1 rounded-full border border-primary/30">Traditionnel</div>
+        </div>
+        <div class="p-6 flex flex-col flex-grow">
+          <h3 class="text-xl font-black text-white mb-1">منسف تقليدي</h3>
+          <p class="text-primary/80 text-xs font-bold tracking-wide mb-3 uppercase">Mansaf — Plat Royal</p>
+          <p class="text-white/40 text-sm leading-relaxed mb-5 flex-grow">
+            Le plat royal jordanien dans sa forme la plus authentique : de l'agneau fermier longuement cuit dans un jameed (lait fermenté de brebis) originaire de Karak, servi en couches généreuses sur un lit de pain shrak croustillant et de riz blanc parfumé au beurre clarifié, nappé d'une sauce onctueuse et parsemé d'amandes et de persil frais.
+          </p>
+          <button onclick="showToast('تم استلام طلبك للمنسف ✓')"
+            class="btn-shine w-full bg-primary text-white font-black py-3.5 rounded-xl hover:bg-primary-dark hover:scale-[1.02] transition-all duration-300 text-base">
+            اطلب <i class="fas fa-chevron-left text-xs mr-1"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- ─ Card 5 ─ -->
+      <div class="menu-card bg-ink rounded-2xl overflow-hidden border border-white/6 flex flex-col" data-aos="fade-up" data-aos-delay="80">
+        <div class="relative h-60 overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=800&auto=format&fit=crop"
+               alt="مندي ضأن" class="card-img w-full h-full object-cover"/>
+          <div class="absolute inset-0" style="background:linear-gradient(to top,rgba(10,10,10,.8) 0%,transparent 55%)"></div>
+          <div class="absolute bottom-4 start-4 bg-primary text-white px-4 py-1.5 rounded-full text-sm font-black shadow-lg">٦٠ ر.س</div>
+          <div class="absolute top-4 end-4 bg-ink/70 backdrop-blur-sm text-primary text-xs font-bold px-3 py-1 rounded-full border border-primary/30">Slow Cook</div>
+        </div>
+        <div class="p-6 flex flex-col flex-grow">
+          <h3 class="text-xl font-black text-white mb-1">مندي الضأن</h3>
+          <p class="text-primary/80 text-xs font-bold tracking-wide mb-3 uppercase">Mandi d'Agneau Fumé</p>
+          <p class="text-white/40 text-sm leading-relaxed mb-5 flex-grow">
+            Un agneau entier, assaisonné d'un mélange secret de huit épices yéménites, cuit lentement pendant sept heures dans un four souterrain en argile à chaleur douce et régulière. La viande, d'une tendreté incomparable, se sépare naturellement des os. Servi sur un riz long fumé aux copeaux de bois de cerisier, accompagné de notre sauce mafroum maison.
+          </p>
+          <button onclick="showToast('تم استلام طلبك لمندي الضأن ✓')"
+            class="btn-shine w-full bg-primary text-white font-black py-3.5 rounded-xl hover:bg-primary-dark hover:scale-[1.02] transition-all duration-300 text-base">
+            اطلب <i class="fas fa-chevron-left text-xs mr-1"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- ─ Card 6 ─ -->
+      <div class="menu-card bg-ink rounded-2xl overflow-hidden border border-white/6 flex flex-col" data-aos="fade-up" data-aos-delay="160">
+        <div class="relative h-60 overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?q=80&w=800&auto=format&fit=crop"
+               alt="هريسة التمر" class="card-img w-full h-full object-cover"/>
+          <div class="absolute inset-0" style="background:linear-gradient(to top,rgba(10,10,10,.8) 0%,transparent 55%)"></div>
+          <div class="absolute bottom-4 start-4 bg-primary text-white px-4 py-1.5 rounded-full text-sm font-black shadow-lg">٢٥ ر.س</div>
+          <div class="absolute top-4 end-4 bg-ink/70 backdrop-blur-sm text-primary text-xs font-bold px-3 py-1 rounded-full border border-primary/30">Dessert</div>
+        </div>
+        <div class="p-6 flex flex-col flex-grow">
+          <h3 class="text-xl font-black text-white mb-1">هريسة التمر</h3>
+          <p class="text-primary/80 text-xs font-bold tracking-wide mb-3 uppercase">Harissa aux Dattes & Noix</p>
+          <p class="text-white/40 text-sm leading-relaxed mb-5 flex-grow">
+            Une pâtisserie orientale d'exception préparée à base de semoule fine imbibée de beurre pur, garnie d'un cœur fondant de dattes Medjool premium mélangées à des pistaches de Halep et des noix de cajou torréfiées. Cuite au four jusqu'à obtenir une croûte dorée, puis généreusement nappée d'un sirop de fleur d'oranger tiède et parsemée de graines de sésame doré.
+          </p>
+          <button onclick="showToast('تم استلام طلبك لهريسة التمر ✓')"
+            class="btn-shine w-full bg-primary text-white font-black py-3.5 rounded-xl hover:bg-primary-dark hover:scale-[1.02] transition-all duration-300 text-base">
+            اطلب <i class="fas fa-chevron-left text-xs mr-1"></i>
+          </button>
+        </div>
+      </div>
+
+    </div><!-- /desktop grid -->
+
+    <!-- Mobile Swiper -->
+    <div class="md:hidden swiper menu-swiper" data-aos="fade-up">
+      <div class="swiper-wrapper pb-12">
+
+        <div class="swiper-slide px-2">
+          <div class="menu-card bg-ink rounded-2xl overflow-hidden border border-white/6 flex flex-col">
+            <div class="relative h-52 overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1585937421612-70a008356fbe?q=80&w=800&auto=format&fit=crop" alt="" class="card-img w-full h-full object-cover"/>
+              <div class="absolute inset-0" style="background:linear-gradient(to top,rgba(10,10,10,.8) 0%,transparent 55%)"></div>
+              <div class="absolute bottom-4 start-4 bg-primary text-white px-3 py-1 rounded-full text-sm font-black">٥٥ ر.س</div>
+            </div>
+            <div class="p-5 flex flex-col flex-grow">
+              <h3 class="text-lg font-black text-white mb-1">مرقة خروف بالكمون</h3>
+              <p class="text-primary/70 text-xs font-bold tracking-wide mb-2 uppercase">Soupe d'agneau au cumin</p>
+              <p class="text-white/40 text-xs leading-relaxed mb-4 flex-grow">Un bouillon généreux mijoté pendant des heures avec de l'agneau local, du cumin grillé et des épices arabes. Servi avec du pain cuit au four à bois.</p>
+              <button onclick="showToast('تم استلام الطلب ✓')" class="btn-shine w-full bg-primary text-white font-black py-3 rounded-xl hover:bg-primary-dark transition-all">اطلب</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="swiper-slide px-2">
+          <div class="menu-card bg-ink rounded-2xl overflow-hidden border border-white/6 flex flex-col">
+            <div class="relative h-52 overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?q=80&w=800&auto=format&fit=crop" alt="" class="card-img w-full h-full object-cover"/>
+              <div class="absolute inset-0" style="background:linear-gradient(to top,rgba(10,10,10,.8) 0%,transparent 55%)"></div>
+              <div class="absolute bottom-4 start-4 bg-primary text-white px-3 py-1 rounded-full text-sm font-black">٤٢ ر.س</div>
+            </div>
+            <div class="p-5 flex flex-col flex-grow">
+              <h3 class="text-lg font-black text-white mb-1">مضبي الدجاج</h3>
+              <p class="text-primary/70 text-xs font-bold tracking-wide mb-2 uppercase">Poulet Mathbi Grillé</p>
+              <p class="text-white/40 text-xs leading-relaxed mb-4 flex-grow">Demi-poulet mariné dans douze épices arabes, grillé sur pierre volcanique. Accompagné d'un riz kabuli au safran et d'amandes dorées.</p>
+              <button onclick="showToast('تم استلام الطلب ✓')" class="btn-shine w-full bg-primary text-white font-black py-3 rounded-xl hover:bg-primary-dark transition-all">اطلب</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="swiper-slide px-2">
+          <div class="menu-card bg-ink rounded-2xl overflow-hidden border border-white/6 flex flex-col">
+            <div class="relative h-52 overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1512058564366-18510be2db19?q=80&w=800&auto=format&fit=crop" alt="" class="card-img w-full h-full object-cover"/>
+              <div class="absolute inset-0" style="background:linear-gradient(to top,rgba(10,10,10,.8) 0%,transparent 55%)"></div>
+              <div class="absolute bottom-4 start-4 bg-primary text-white px-3 py-1 rounded-full text-sm font-black">٦٥ ر.س</div>
+            </div>
+            <div class="p-5 flex flex-col flex-grow">
+              <h3 class="text-lg font-black text-white mb-1">كبسة اللحم</h3>
+              <p class="text-primary/70 text-xs font-bold tracking-wide mb-2 uppercase">Kabsa — Riz & Agneau</p>
+              <p class="text-white/40 text-xs leading-relaxed mb-4 flex-grow">Riz basmati cuit dans un bouillon d'agneau épicé à la cannelle et cardamome, surmonté d'un gigot braisé et garni de pignons grillés.</p>
+              <button onclick="showToast('تم استلام الطلب ✓')" class="btn-shine w-full bg-primary text-white font-black py-3 rounded-xl hover:bg-primary-dark transition-all">اطلب</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="swiper-slide px-2">
+          <div class="menu-card bg-ink rounded-2xl overflow-hidden border border-white/6 flex flex-col">
+            <div class="relative h-52 overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1574484284002-952d92456975?q=80&w=800&auto=format&fit=crop" alt="" class="card-img w-full h-full object-cover"/>
+              <div class="absolute inset-0" style="background:linear-gradient(to top,rgba(10,10,10,.8) 0%,transparent 55%)"></div>
+              <div class="absolute bottom-4 start-4 bg-primary text-white px-3 py-1 rounded-full text-sm font-black">٧٥ ر.س</div>
+            </div>
+            <div class="p-5 flex flex-col flex-grow">
+              <h3 class="text-lg font-black text-white mb-1">منسف تقليدي</h3>
+              <p class="text-primary/70 text-xs font-bold tracking-wide mb-2 uppercase">Mansaf — Plat Royal</p>
+              <p class="text-white/40 text-xs leading-relaxed mb-4 flex-grow">Agneau cuit dans du jameed de Karak, servi sur pain shrak et riz au beurre clarifié, nappé d'une sauce onctueuse aux amandes fraîches.</p>
+              <button onclick="showToast('تم استلام الطلب ✓')" class="btn-shine w-full bg-primary text-white font-black py-3 rounded-xl hover:bg-primary-dark transition-all">اطلب</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="swiper-slide px-2">
+          <div class="menu-card bg-ink rounded-2xl overflow-hidden border border-white/6 flex flex-col">
+            <div class="relative h-52 overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=800&auto=format&fit=crop" alt="" class="card-img w-full h-full object-cover"/>
+              <div class="absolute inset-0" style="background:linear-gradient(to top,rgba(10,10,10,.8) 0%,transparent 55%)"></div>
+              <div class="absolute bottom-4 start-4 bg-primary text-white px-3 py-1 rounded-full text-sm font-black">٦٠ ر.س</div>
+            </div>
+            <div class="p-5 flex flex-col flex-grow">
+              <h3 class="text-lg font-black text-white mb-1">مندي الضأن</h3>
+              <p class="text-primary/70 text-xs font-bold tracking-wide mb-2 uppercase">Mandi d'Agneau Fumé</p>
+              <p class="text-white/40 text-xs leading-relaxed mb-4 flex-grow">Agneau cuit 7h dans un four en argile souterrain, servi sur un riz fumé aux copeaux de cerisier. Une tendreté incomparable.</p>
+              <button onclick="showToast('تم استلام الطلب ✓')" class="btn-shine w-full bg-primary text-white font-black py-3 rounded-xl hover:bg-primary-dark transition-all">اطلب</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="swiper-slide px-2">
+          <div class="menu-card bg-ink rounded-2xl overflow-hidden border border-white/6 flex flex-col">
+            <div class="relative h-52 overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?q=80&w=800&auto=format&fit=crop" alt="" class="card-img w-full h-full object-cover"/>
+              <div class="absolute inset-0" style="background:linear-gradient(to top,rgba(10,10,10,.8) 0%,transparent 55%)"></div>
+              <div class="absolute bottom-4 start-4 bg-primary text-white px-3 py-1 rounded-full text-sm font-black">٢٥ ر.س</div>
+            </div>
+            <div class="p-5 flex flex-col flex-grow">
+              <h3 class="text-lg font-black text-white mb-1">هريسة التمر</h3>
+              <p class="text-primary/70 text-xs font-bold tracking-wide mb-2 uppercase">Harissa aux Dattes</p>
+              <p class="text-white/40 text-xs leading-relaxed mb-4 flex-grow">Semoule fine au beurre, garnie de dattes Medjool et pistaches, nappée d'un sirop de fleur d'oranger tiède et parsemée de sésame doré.</p>
+              <button onclick="showToast('تم استلام الطلب ✓')" class="btn-shine w-full bg-primary text-white font-black py-3 rounded-xl hover:bg-primary-dark transition-all">اطلب</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="swiper-pagination"></div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     DELIVERY — Professional
+══════════════════════════════════════════ -->
+<section id="delivery" class="relative py-20 bg-ink overflow-hidden">
+  <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse at 0% 50%,rgba(249,115,22,.07) 0%,transparent 60%),radial-gradient(ellipse at 100% 0%,rgba(249,115,22,.05) 0%,transparent 50%)"></div>
+  <div class="absolute top-0 left-0 w-full h-px" style="background:linear-gradient(90deg,transparent,rgba(249,115,22,.3),transparent)"></div>
+  <div class="absolute bottom-0 left-0 w-full h-px" style="background:linear-gradient(90deg,transparent,rgba(249,115,22,.3),transparent)"></div>
+
+  <div class="container mx-auto px-6 lg:px-12">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+
+      <!-- Text -->
+      <div data-aos="fade-right">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="h-px w-8 bg-primary/40"></div>
+          <span class="text-primary/60 text-xs font-bold tracking-widest uppercase">Service de Livraison</span>
+        </div>
+        <h2 class="text-4xl md:text-5xl font-black text-white mb-4 leading-snug">
+          اطلب الآن<br/>
+          <span class="text-primary">وسنوصل إليك</span>
+        </h2>
+        <p class="text-white/45 text-lg font-light mb-8 leading-relaxed max-w-sm">
+          Profitez des meilleures saveurs arabes authentiques depuis le confort de votre maison — frais et chauds jusqu'à votre porte.
+        </p>
+
+        <!-- Location badge -->
+        <div class="inline-flex items-center gap-4 rounded-2xl px-5 py-4 mb-8 border border-primary/20"
+             style="background:rgba(249,115,22,.07)">
+          <div class="w-10 h-10 rounded-full bg-primary/15 flex items-center justify-center shrink-0">
+            <i class="fas fa-location-dot text-primary text-base"></i>
+          </div>
+          <div class="text-right">
+            <p class="text-white font-black text-base">التوصيل داخل الولاية فقط</p>
+            <p class="text-white/40 text-sm">Livraison dans toute la wilaya</p>
+          </div>
+        </div>
+
+        <!-- CTAs -->
+        <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+          <a href="#menu"
+             class="btn-shine bg-primary text-white px-10 py-4 rounded-2xl text-lg font-black hover:bg-primary-dark hover:scale-105 transition-all duration-300 flex items-center gap-2 animate-glow-pulse shadow-2xl">
+            اطلب الآن
+            <i class="fas fa-chevron-left text-sm"></i>
+          </a>
+          <div class="flex gap-3">
+            <a href="tel:+966500000000"
+               class="flex items-center gap-2 text-white px-5 py-4 rounded-2xl hover:-translate-y-0.5 transition-all duration-300 text-sm font-bold border border-white/10"
+               style="background:rgba(255,255,255,.05)">
+              <i class="fas fa-phone text-primary text-base"></i>
+              <span class="hidden sm:inline">اتصل بنا</span>
+            </a>
+            <a href="https://wa.me/966500000000" target="_blank" rel="noreferrer"
+               class="flex items-center gap-2 text-white px-5 py-4 rounded-2xl hover:-translate-y-0.5 transition-all duration-300 text-sm font-bold border border-white/10"
+               style="background:rgba(255,255,255,.05)">
+              <i class="fab fa-whatsapp text-primary text-base"></i>
+              <span class="hidden sm:inline">واتساب</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="grid grid-cols-2 gap-4" data-aos="fade-left" data-aos-delay="100">
+        <div class="stat-card rounded-2xl p-6 border border-white/6 cursor-default" style="background:rgba(255,255,255,.03)">
+          <i class="fas fa-clock text-primary text-2xl mb-4 block"></i>
+          <p class="text-white text-3xl font-black leading-none mb-1">٣٠ د</p>
+          <p class="text-white/60 text-sm font-bold">وقت التوصيل</p>
+          <p class="text-white/25 text-xs mt-1">Délai moyen garanti</p>
+        </div>
+        <div class="stat-card rounded-2xl p-6 border border-white/6 cursor-default" style="background:rgba(255,255,255,.03)">
+          <i class="fas fa-map-location-dot text-primary text-2xl mb-4 block"></i>
+          <p class="text-white text-3xl font-black leading-none mb-1">١٥+</p>
+          <p class="text-white/60 text-sm font-bold">أحياء التغطية</p>
+          <p class="text-white/25 text-xs mt-1">Zones desservies</p>
+        </div>
+        <div class="stat-card rounded-2xl p-6 border border-white/6 cursor-default" style="background:rgba(255,255,255,.03)">
+          <i class="fas fa-shield-check text-primary text-2xl mb-4 block"></i>
+          <p class="text-white text-3xl font-black leading-none mb-1">١٠٠٪</p>
+          <p class="text-white/60 text-sm font-bold">ضمان الجودة</p>
+          <p class="text-white/25 text-xs mt-1">Qualité garantie</p>
+        </div>
+        <div class="stat-card rounded-2xl p-6 border border-white/6 cursor-default" style="background:rgba(255,255,255,.03)">
+          <i class="fas fa-headset text-primary text-2xl mb-4 block"></i>
+          <p class="text-white text-3xl font-black leading-none mb-1">٢٤/٧</p>
+          <p class="text-white/60 text-sm font-bold">خدمة العملاء</p>
+          <p class="text-white/25 text-xs mt-1">Support en continu</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     ABOUT
+══════════════════════════════════════════ -->
+<section id="about" class="py-28 bg-ink-800">
+  <div class="container mx-auto px-6 lg:px-12">
+    <div class="flex flex-col lg:flex-row items-center gap-16">
+
+      <div class="lg:w-1/2 space-y-6">
+        <div data-aos="fade-up">
+          <span class="text-primary font-black tracking-widest text-xs uppercase">Notre Histoire</span>
+          <h2 class="text-4xl md:text-5xl font-black text-white mt-3 leading-snug">
+            حكاية شغف<br/>بالطعم العربي الأصيل
+          </h2>
+        </div>
+        <div class="space-y-4 text-base text-white/45 leading-relaxed border-r-4 border-primary/40 pr-6" data-aos="fade-up" data-aos-delay="100">
+          <p>بدأت حكايتنا من مطبخ العائلة، حيث ورثنا أسرار الوصفات التقليدية التي تتناقلها الأجيال جيلاً بعد جيل بكل أمانة وحب.</p>
+          <p>Depuis plus de 15 ans, nous nous engageons à ne sélectionner que les meilleurs ingrédients locaux, à torréfier nos épices chaque matin et à cuisiner avec le même amour que celui d'une mère pour ses enfants.</p>
+        </div>
+        <div data-aos="zoom-in" data-aos-delay="150">
+          <div class="rounded-2xl p-6 border border-primary/20 inline-block" style="background:rgba(249,115,22,.06)">
+            <span class="text-4xl text-primary/20 font-serif block mb-1">"</span>
+            <p class="text-lg font-black text-primary">La générosité est notre nature, la qualité est notre principe.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="lg:w-1/2 w-full" data-aos="zoom-in" data-aos-delay="150">
+        <div class="relative">
+          <div class="absolute inset-0 bg-primary rounded-3xl rotate-3 scale-[1.04] -z-10 opacity-60"></div>
+          <img
+            src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=1974&auto=format&fit=crop"
+            alt="مطبخ الأصالة"
+            class="rounded-3xl w-full h-[440px] object-cover shadow-2xl"
+          />
+          <div class="absolute -bottom-6 -right-4 lg:right-auto lg:-left-4 bg-primary text-white p-4 rounded-full shadow-2xl w-28 h-28 flex flex-col items-center justify-center text-center animate-float border-4 border-ink">
+            <span class="text-3xl font-black leading-none">١٥</span>
+            <span class="text-[9px] font-bold leading-tight mt-1">عاماً من<br/>الخبرة</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     CONTACT & REVIEWS
+══════════════════════════════════════════ -->
+<section id="contact" class="py-28 bg-ink">
+  <div class="container mx-auto px-6 lg:px-12">
+
+    <div class="text-center mb-16" data-aos="fade-up">
+      <p class="text-primary font-bold tracking-widest text-xs uppercase mb-3">Avis & Contact</p>
+      <h2 class="text-4xl md:text-5xl font-black text-white">آراء ضيوفنا وتواصل معنا</h2>
+      <div class="w-20 h-1 bg-primary rounded-full mx-auto mt-5"></div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+
+      <!-- Reviews -->
+      <div class="space-y-5">
+        <div class="bg-ink-800 p-6 rounded-2xl border border-white/6 hover:border-primary/25 transition-all duration-300" data-aos="fade-up" data-aos-delay="0">
+          <div class="flex items-center gap-4 mb-4">
+            <div class="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center font-black text-sm shrink-0">ع.ط</div>
+            <div>
+              <h4 class="font-black text-white">عبدالله الطريقي</h4>
+              <div class="flex gap-1 mt-1">
+                <i class="fas fa-star text-primary text-xs star-ani"></i>
+                <i class="fas fa-star text-primary text-xs star-ani"></i>
+                <i class="fas fa-star text-primary text-xs star-ani"></i>
+                <i class="fas fa-star text-primary text-xs star-ani"></i>
+                <i class="fas fa-star text-primary text-xs star-ani"></i>
+              </div>
+            </div>
+          </div>
+          <p class="text-white/45 text-sm leading-relaxed">"أفضل مطعم يقدم الأكل الشعبي بطريقة فاخرة. المندي عندهم خيالي واللحم يذوب في الفم!"</p>
+        </div>
+
+        <div class="bg-ink-800 p-6 rounded-2xl border border-white/6 hover:border-primary/25 transition-all duration-300" data-aos="fade-up" data-aos-delay="100">
+          <div class="flex items-center gap-4 mb-4">
+            <div class="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center font-black text-sm shrink-0">ن.س</div>
+            <div>
+              <h4 class="font-black text-white">نورة السالم</h4>
+              <div class="flex gap-1 mt-1">
+                <i class="fas fa-star text-primary text-xs star-ani"></i>
+                <i class="fas fa-star text-primary text-xs star-ani"></i>
+                <i class="fas fa-star text-primary text-xs star-ani"></i>
+                <i class="fas fa-star text-primary text-xs star-ani"></i>
+                <i class="fas fa-star text-primary text-xs star-ani"></i>
+              </div>
+            </div>
+          </div>
+          <p class="text-white/45 text-sm leading-relaxed">"تجربة استثنائية من الاستقبال وحتى الوداع. جربنا المضبي والكبسة وكانت من أروع ما ذقت."</p>
+        </div>
+
+        <div class="bg-ink-800 p-6 rounded-2xl border border-white/6 hover:border-primary/25 transition-all duration-300" data-aos="fade-up" data-aos-delay="200">
+          <div class="flex items-center gap-4 mb-4">
+            <div class="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center font-black text-sm shrink-0">خ.ع</div>
+            <div>
+              <h4 class="font-black text-white">خالد العنزي</h4>
+              <div class="flex gap-1 mt-1">
+                <i class="fas fa-star text-primary text-xs star-ani"></i>
+                <i class="fas fa-star text-primary text-xs star-ani"></i>
+                <i class="fas fa-star text-primary text-xs star-ani"></i>
+                <i class="fas fa-star text-primary text-xs star-ani"></i>
+                <i class="fas fa-star text-primary text-xs star-ani"></i>
+              </div>
+            </div>
+          </div>
+          <p class="text-white/45 text-sm leading-relaxed">"المنسف عندهم يذكرك بأيام زمان، الجميد أصلي واللحم بلدي ممتاز. الجلسات راقية جداً."</p>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <div data-aos="zoom-in" data-aos-delay="100">
+        <div class="bg-ink-800 p-8 rounded-3xl border border-white/6">
+          <h3 class="text-2xl font-black text-white mb-7">
+            تواصل معنا
+            <span class="block text-sm text-white/30 font-light mt-1">Contactez-nous</span>
+          </h3>
+          <form class="space-y-5" onsubmit="handleForm(event)">
+            <div>
+              <label class="block text-sm font-bold text-white/60 mb-2">الاسم الكريم</label>
+              <input type="text" required placeholder="Votre nom complet"
+                class="form-input w-full bg-ink border border-white/8 text-white placeholder-white/20 rounded-xl px-4 py-3" />
+            </div>
+            <div>
+              <label class="block text-sm font-bold text-white/60 mb-2">رقم الجوال</label>
+              <input type="tel" required placeholder="05X XXX XXXX" dir="ltr"
+                class="form-input w-full bg-ink border border-white/8 text-white placeholder-white/20 rounded-xl px-4 py-3 text-left" />
+            </div>
+            <div>
+              <label class="block text-sm font-bold text-white/60 mb-2">الرسالة / Message</label>
+              <textarea rows="4" required placeholder="Comment pouvons-nous vous aider ?"
+                class="form-input w-full bg-ink border border-white/8 text-white placeholder-white/20 rounded-xl px-4 py-3 resize-none"></textarea>
+            </div>
+            <button type="submit"
+              class="btn-shine w-full bg-primary text-white font-black text-lg py-4 rounded-xl hover:bg-primary-dark hover:-translate-y-0.5 hover:shadow-xl transition-all duration-300 active:scale-95">
+              إرسال الرسالة &nbsp;<i class="fas fa-paper-plane text-sm"></i>
+            </button>
+          </form>
+
+          <div class="mt-7 pt-7 border-t border-white/6 grid grid-cols-2 gap-5">
+            <div class="flex items-start gap-3">
+              <div class="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
+                <i class="fas fa-location-dot text-primary text-sm"></i>
+              </div>
+              <div>
+                <p class="font-bold text-white/70 text-sm">العنوان</p>
+                <p class="text-white/30 text-xs mt-1 leading-relaxed">طريق الملك عبدالعزيز<br/>حي الياسمين</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
+                <i class="fas fa-clock text-primary text-sm"></i>
+              </div>
+              <div>
+                <p class="font-bold text-white/70 text-sm">ساعات العمل</p>
+                <p class="text-white/30 text-xs mt-1 leading-relaxed">١٢:٠٠ ظهراً – ٢:٠٠ صباحاً<br/>طوال الأسبوع</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════ -->
+<footer class="bg-ink-800 border-t border-white/5 pt-16 pb-8">
+  <div class="container mx-auto px-6 lg:px-12">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+
+      <div class="space-y-4">
+        <div class="flex items-center gap-2">
+          <div class="w-9 h-9 rounded-full bg-primary flex items-center justify-center">
+            <i class="fas fa-utensils text-white text-xs"></i>
+          </div>
+          <span class="text-xl font-black text-white">مطعم الأصالة</span>
+        </div>
+        <p class="text-white/30 text-sm leading-relaxed max-w-xs">
+          Une expérience culinaire d'exception qui allie la richesse du passé et l'élégance du présent.
+        </p>
+      </div>
+
+      <div>
+        <h4 class="font-black text-white/70 text-sm mb-5 pb-3 border-b border-white/6 tracking-widest uppercase">Liens rapides</h4>
+        <ul class="space-y-3">
+          <li><a href="#home"    class="text-white/30 hover:text-primary transition-colors text-sm flex items-center gap-2 group"><span class="w-1 h-1 rounded-full bg-primary/30 group-hover:bg-primary transition-colors"></span>الرئيسية</a></li>
+          <li><a href="#menu"    class="text-white/30 hover:text-primary transition-colors text-sm flex items-center gap-2 group"><span class="w-1 h-1 rounded-full bg-primary/30 group-hover:bg-primary transition-colors"></span>القائمة</a></li>
+          <li><a href="#about"   class="text-white/30 hover:text-primary transition-colors text-sm flex items-center gap-2 group"><span class="w-1 h-1 rounded-full bg-primary/30 group-hover:bg-primary transition-colors"></span>قصتنا</a></li>
+          <li><a href="#contact" class="text-white/30 hover:text-primary transition-colors text-sm flex items-center gap-2 group"><span class="w-1 h-1 rounded-full bg-primary/30 group-hover:bg-primary transition-colors"></span>تواصل معنا</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="font-black text-white/70 text-sm mb-5 pb-3 border-b border-white/6 tracking-widest uppercase">Réseaux sociaux</h4>
+        <div class="flex gap-3">
+          <a href="#" class="w-10 h-10 rounded-full bg-white/4 hover:bg-primary text-white/40 hover:text-white flex items-center justify-center transition-all duration-300 hover:-translate-y-1" aria-label="Instagram"><i class="fab fa-instagram text-sm"></i></a>
+          <a href="#" class="w-10 h-10 rounded-full bg-white/4 hover:bg-primary text-white/40 hover:text-white flex items-center justify-center transition-all duration-300 hover:-translate-y-1" aria-label="X"><i class="fab fa-x-twitter text-sm"></i></a>
+          <a href="#" class="w-10 h-10 rounded-full bg-white/4 hover:bg-primary text-white/40 hover:text-white flex items-center justify-center transition-all duration-300 hover:-translate-y-1" aria-label="Facebook"><i class="fab fa-facebook-f text-sm"></i></a>
+          <a href="https://wa.me/966500000000" class="w-10 h-10 rounded-full bg-white/4 hover:bg-primary text-white/40 hover:text-white flex items-center justify-center transition-all duration-300 hover:-translate-y-1" aria-label="WhatsApp"><i class="fab fa-whatsapp text-sm"></i></a>
+          <a href="#" class="w-10 h-10 rounded-full bg-white/4 hover:bg-primary text-white/40 hover:text-white flex items-center justify-center transition-all duration-300 hover:-translate-y-1" aria-label="TikTok"><i class="fab fa-tiktok text-sm"></i></a>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-3">
+      <p class="text-white/20 text-sm">© <span id="year"></span> مطعم الأصالة — Tous droits réservés</p>
+      <p class="text-white/20 text-sm">Fait avec <span class="text-primary">♥</span> pour la culture arabe</p>
+    </div>
+  </div>
+</footer>
+
+
+<!-- Toast -->
+<div id="toast"></div>
+
+
+<!-- ═══ SCRIPTS ═══ -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+<script>
+/* ── AOS ── */
+AOS.init({ duration: 650, easing: 'ease-out-cubic', once: true, offset: 70 });
+
+/* ── Swiper ── */
+new Swiper('.menu-swiper', {
+  slidesPerView: 1.1,
+  spaceBetween: 0,
+  centeredSlides: true,
+  pagination: { el: '.swiper-pagination', clickable: true },
+  breakpoints: { 480: { slidesPerView: 1.35 } }
+});
+
+/* ── Year ── */
+document.getElementById('year').textContent = new Date().getFullYear();
+
+/* ── Navbar scroll ── */
+const navbar  = document.getElementById('navbar');
+const menuBtn = document.getElementById('menu-btn');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 60);
+  navbar.style.paddingTop = navbar.style.paddingBottom = window.scrollY > 60 ? '.8rem' : '1.25rem';
+}, { passive: true });
+
+/* ── Mobile menu ── */
+const mobileMenu = document.getElementById('mobile-menu');
+menuBtn.addEventListener('click', () => {
+  mobileMenu.classList.toggle('open');
+  const i = menuBtn.querySelector('i');
+  i.className = mobileMenu.classList.contains('open') ? 'fas fa-xmark text-xl' : 'fas fa-bars text-xl';
+});
+function closeMobileMenu() {
+  mobileMenu.classList.remove('open');
+  menuBtn.querySelector('i').className = 'fas fa-bars text-xl';
+}
+
+/* ── Hero entrance ── */
+window.addEventListener('load', () => {
+  [
+    ['hero-label', 300, 'translate-y-4'],
+    ['hero-title', 550, 'translate-y-12'],
+    ['hero-sub',   800, 'translate-y-8'],
+    ['hero-btns',  1050,'translate-y-6'],
+  ].forEach(([id, delay, cls]) => {
+    setTimeout(() => {
+      const el = document.getElementById(id);
+      el.classList.remove('opacity-0', cls);
+    }, delay);
+  });
+});
+
+/* ── Hero parallax ── */
+const heroImg = document.getElementById('hero-img');
+window.addEventListener('scroll', () => {
+  heroImg.style.transform = `scale(1.1) translateY(${window.scrollY * 0.18}px)`;
+}, { passive: true });
+
+/* ── Toast ── */
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+/* ── Contact form ── */
+function handleForm(e) {
+  e.preventDefault();
+  showToast('تم استلام رسالتك — Message reçu ✓');
+  e.target.reset();
+}
+</script>
+
+</body>
+</html>
