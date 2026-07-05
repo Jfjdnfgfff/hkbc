@@ -86,7 +86,7 @@
     .nav-link:hover::after { right: 0; left: 0; }
 
     /* ── Card ── */
-    .menu-card { transition: transform .4s cubic-bezier(.22,1,.36,1), box-shadow .4s ease; }
+    .menu-card { box-shadow: 0 0 22px rgba(249,115,22,.22), 0 0 48px rgba(249,115,22,.08); transition: transform .4s cubic-bezier(.22,1,.36,1), box-shadow .4s ease; }
     .menu-card:hover { transform: translateY(-10px); box-shadow: 0 28px 56px rgba(249,115,22,.18); }
     .menu-card:hover .card-img { transform: scale(1.08); }
     .card-img { transition: transform .6s cubic-bezier(.22,1,.36,1); }
@@ -317,7 +317,7 @@
     <div class="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-7">
 
       <!-- ─ Card 1 ─ -->
-      <div class="menu-card bg-ink rounded-2xl overflow-hidden border border-white/6 flex flex-col" data-aos="fade-up" data-aos-delay="0">
+      <div class="menu-card bg-ink rounded-2xl overflow-hidden flex flex-col" data-aos="fade-up" data-aos-delay="0">
         <div class="relative h-60 overflow-hidden">
           <img src="https://images.unsplash.com/photo-1585937421612-70a008356fbe?q=80&w=800&auto=format&fit=crop"
                alt="مرقة خروف" class="card-img w-full h-full object-cover"/>
@@ -341,7 +341,7 @@
       </div>
 
       <!-- ─ Card 2 ─ -->
-      <div class="menu-card bg-ink rounded-2xl overflow-hidden border border-white/6 flex flex-col" data-aos="fade-up" data-aos-delay="80">
+      <div class="menu-card bg-ink rounded-2xl overflow-hidden flex flex-col" data-aos="fade-up" data-aos-delay="80">
         <div class="relative h-60 overflow-hidden">
           <img src="https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?q=80&w=800&auto=format&fit=crop"
                alt="مضبي دجاج" class="card-img w-full h-full object-cover"/>
@@ -363,7 +363,7 @@
       </div>
 
       <!-- ─ Card 3 ─ -->
-      <div class="menu-card bg-ink rounded-2xl overflow-hidden border border-white/6 flex flex-col" data-aos="fade-up" data-aos-delay="160">
+      <div class="menu-card bg-ink rounded-2xl overflow-hidden flex flex-col" data-aos="fade-up" data-aos-delay="160">
         <div class="relative h-60 overflow-hidden">
           <img src="https://images.unsplash.com/photo-1512058564366-18510be2db19?q=80&w=800&auto=format&fit=crop"
                alt="كبسة اللحم" class="card-img w-full h-full object-cover"/>
@@ -385,7 +385,7 @@
       </div>
 
       <!-- ─ Card 4 ─ -->
-      <div class="menu-card bg-ink rounded-2xl overflow-hidden border border-white/6 flex flex-col" data-aos="fade-up" data-aos-delay="0">
+      <div class="menu-card bg-ink rounded-2xl overflow-hidden flex flex-col" data-aos="fade-up" data-aos-delay="0">
         <div class="relative h-60 overflow-hidden">
           <img src="https://images.unsplash.com/photo-1574484284002-952d92456975?q=80&w=800&auto=format&fit=crop"
                alt="منسف" class="card-img w-full h-full object-cover"/>
@@ -407,7 +407,7 @@
       </div>
 
       <!-- ─ Card 5 ─ -->
-      <div class="menu-card bg-ink rounded-2xl overflow-hidden border border-white/6 flex flex-col" data-aos="fade-up" data-aos-delay="80">
+      <div class="menu-card bg-ink rounded-2xl overflow-hidden flex flex-col" data-aos="fade-up" data-aos-delay="80">
         <div class="relative h-60 overflow-hidden">
           <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=800&auto=format&fit=crop"
                alt="مندي ضأن" class="card-img w-full h-full object-cover"/>
@@ -429,7 +429,7 @@
       </div>
 
       <!-- ─ Card 6 ─ -->
-      <div class="menu-card bg-ink rounded-2xl overflow-hidden border border-white/6 flex flex-col" data-aos="fade-up" data-aos-delay="160">
+      <div class="menu-card bg-ink rounded-2xl overflow-hidden flex flex-col" data-aos="fade-up" data-aos-delay="160">
         <div class="relative h-60 overflow-hidden">
           <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?q=80&w=800&auto=format&fit=crop"
                alt="هريسة التمر" class="card-img w-full h-full object-cover"/>
@@ -457,7 +457,7 @@
       <div class="swiper-wrapper pb-12">
 
         <div class="swiper-slide px-2">
-          <div class="menu-card bg-ink rounded-2xl overflow-hidden border border-white/6 flex flex-col">
+          <div class="menu-card bg-ink rounded-2xl overflow-hidden flex flex-col">
             <div class="relative h-52 overflow-hidden">
               <img src="https://images.unsplash.com/photo-1585937421612-70a008356fbe?q=80&w=800&auto=format&fit=crop" alt="" class="card-img w-full h-full object-cover"/>
               <div class="absolute inset-0" style="background:linear-gradient(to top,rgba(10,10,10,.8) 0%,transparent 55%)"></div>
@@ -473,7 +473,7 @@
         </div>
 
         <div class="swiper-slide px-2">
-          <div class="menu-card bg-ink rounded-2xl overflow-hidden border border-white/6 flex flex-col">
+          <div class="menu-card bg-ink rounded-2xl overflow-hidden flex flex-col">
             <div class="relative h-52 overflow-hidden">
               <img src="https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?q=80&w=800&auto=format&fit=crop" alt="" class="card-img w-full h-full object-cover"/>
               <div class="absolute inset-0" style="background:linear-gradient(to top,rgba(10,10,10,.8) 0%,transparent 55%)"></div>
@@ -489,7 +489,7 @@
         </div>
 
         <div class="swiper-slide px-2">
-          <div class="menu-card bg-ink rounded-2xl overflow-hidden border border-white/6 flex flex-col">
+          <div class="menu-card bg-ink rounded-2xl overflow-hidden flex flex-col">
             <div class="relative h-52 overflow-hidden">
               <img src="https://images.unsplash.com/photo-1512058564366-18510be2db19?q=80&w=800&auto=format&fit=crop" alt="" class="card-img w-full h-full object-cover"/>
               <div class="absolute inset-0" style="background:linear-gradient(to top,rgba(10,10,10,.8) 0%,transparent 55%)"></div>
@@ -505,7 +505,7 @@
         </div>
 
         <div class="swiper-slide px-2">
-          <div class="menu-card bg-ink rounded-2xl overflow-hidden border border-white/6 flex flex-col">
+          <div class="menu-card bg-ink rounded-2xl overflow-hidden flex flex-col">
             <div class="relative h-52 overflow-hidden">
               <img src="https://images.unsplash.com/photo-1574484284002-952d92456975?q=80&w=800&auto=format&fit=crop" alt="" class="card-img w-full h-full object-cover"/>
               <div class="absolute inset-0" style="background:linear-gradient(to top,rgba(10,10,10,.8) 0%,transparent 55%)"></div>
@@ -521,7 +521,7 @@
         </div>
 
         <div class="swiper-slide px-2">
-          <div class="menu-card bg-ink rounded-2xl overflow-hidden border border-white/6 flex flex-col">
+          <div class="menu-card bg-ink rounded-2xl overflow-hidden flex flex-col">
             <div class="relative h-52 overflow-hidden">
               <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=800&auto=format&fit=crop" alt="" class="card-img w-full h-full object-cover"/>
               <div class="absolute inset-0" style="background:linear-gradient(to top,rgba(10,10,10,.8) 0%,transparent 55%)"></div>
@@ -537,7 +537,7 @@
         </div>
 
         <div class="swiper-slide px-2">
-          <div class="menu-card bg-ink rounded-2xl overflow-hidden border border-white/6 flex flex-col">
+          <div class="menu-card bg-ink rounded-2xl overflow-hidden flex flex-col">
             <div class="relative h-52 overflow-hidden">
               <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?q=80&w=800&auto=format&fit=crop" alt="" class="card-img w-full h-full object-cover"/>
               <div class="absolute inset-0" style="background:linear-gradient(to top,rgba(10,10,10,.8) 0%,transparent 55%)"></div>
